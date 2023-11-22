@@ -7,6 +7,16 @@
 <body>
     <h1>Bitcoin Price and Sentiment Analysis</h1>
 
+    <form action="/" method="get">
+        <label for="from_date">From:</label>
+        <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
+
+        <label for="to_date">To:</label>
+        <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+
+        <button type="submit">Search</button>
+    </form>
+
     <h2>Mastodon Data</h2>
     {{ graph_html_mastodon|safe }}
 
