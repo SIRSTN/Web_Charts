@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bitcoin Price and Sentiment Analysis</title>
+    <title>Price and Sentiment Analysis</title>
 </head> 
 <body>
-    <h1>Bitcoin Price and Sentiment Analysis</h1>
+    <h1>Price and Sentiment Analysis</h1>
 
     <form action="/" method="get">
         <label for="from_date">From:</label>
@@ -13,6 +13,12 @@
 
         <label for="to_date">To:</label>
         <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+
+        <label for="keyword">Keyword:</label>
+        <select id="keyword" name="keyword">
+            <option value="Bitcoin" {% if keyword == 'Bitcoin' %}selected{% endif %}>Bitcoin</option>
+            <option value="Ethereum" {% if keyword == 'Ethereum' %}selected{% endif %}>Ethereum</option>
+        </select>
 
         <button type="submit">Search</button>
     </form>

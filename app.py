@@ -9,14 +9,14 @@ import pytz
 
 app = Flask(__name__)
 
-def create_chart(source, from_date=None, to_date=None):
+def create_chart(source, from_date=None, to_date=None, keyword='Bitcoin'):
     # Connect to MongoDB
     client = MongoClient('mongodb://localhost:27017')
     db = client.SocialMedia_Analysis
     collection = db.Sentiment_Averages
 
-    # Prepare query with date filters
-    query = {"source": source}
+    # Prepare query with date filters and keyword
+    query = {"source": source, "keyword": keyword}
     if from_date and to_date:
         from_date_utc = datetime.strptime(from_date, '%Y-%m-%d').replace(tzinfo=pytz.UTC)
         to_date_utc = datetime.strptime(to_date, '%Y-%m-%d').replace(tzinfo=pytz.UTC)
@@ -37,7 +37,7 @@ def create_chart(source, from_date=None, to_date=None):
 
     # Add Bitcoin price plot
     fig.add_trace(
-        go.Scatter(x=df['timestamp'], y=df['price'], name='Bitcoin Price'),
+        go.Scatter(x=df['timestamp'], y=df['price'], name='Price'),
         secondary_y=False,
     )
 
@@ -57,7 +57,7 @@ def create_chart(source, from_date=None, to_date=None):
     fig.update_xaxes(title_text="Timestamp")
 
     # Set y-axes titles
-    fig.update_yaxes(title_text="<b>Primary</b> Bitcoin Price", secondary_y=False)
+    fig.update_yaxes(title_text="<b>Primary</b> Price", secondary_y=False)
     fig.update_yaxes(title_text="<b>Secondary</b> Sentiment Score", secondary_y=True)
 
     # Convert plot to HTML string
@@ -73,18 +73,20 @@ def charts():
     default_from_date_str = default_from_date.strftime('%Y-%m-%d')
     default_to_date_str = default_to_date.strftime('%Y-%m-%d')
 
-    # Get the dates from the request, or use the defaults
+    # Get the dates and keyword from the request, or use the defaults
     from_date = request.args.get('from_date', default_from_date_str)
     to_date = request.args.get('to_date', default_to_date_str)
+    keyword = request.args.get('keyword', 'Bitcoin')
 
-    graph_html_mastodon = create_chart("Mastodon", from_date, to_date)
-    graph_html_reddit = create_chart("Reddit", from_date, to_date)
+    graph_html_mastodon = create_chart("Mastodon", from_date, to_date, keyword)
+    graph_html_reddit = create_chart("Reddit", from_date, to_date, keyword)
     
     return render_template('chart.html', 
                            graph_html_mastodon=graph_html_mastodon, 
                            graph_html_reddit=graph_html_reddit,
                            from_date=from_date, 
-                           to_date=to_date)
+                           to_date=to_date,
+                           keyword=keyword)
 
 if __name__ == '__main__':
     app.run(debug=True)
