@@ -6,13 +6,19 @@ import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 import plotly.io as pio
 import pytz
+from configparser import ConfigParser
 
 app = Flask(__name__)
 
+# Load configuration file
+config = ConfigParser()
+config.read('config.ini')
+
 def create_chart(source, from_date=None, to_date=None, keyword='Bitcoin'):
+
     # Connect to MongoDB
-    client = MongoClient('mongodb://localhost:27017')
-    db = client.SocialMedia_Analysis
+    client = MongoClient(config.get('Web_Charts', 'MongoClient'))
+    db = client.Cluster0
     collection = db.Sentiment_Averages
 
     # Prepare query with date filters and keyword
