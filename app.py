@@ -93,14 +93,16 @@ def charts():
     to_date = request.args.get('to_date', default_to_date_str)
     keyword = request.args.get('keyword', 'Bitcoin')
 
-    graph_html_mastodon = create_chart("Mastodon", from_date, to_date, keyword)
-    graph_html_reddit = create_chart("Reddit", from_date, to_date, keyword)
     graph_html_all_sources = create_chart_all_sources(from_date, to_date, keyword)
+    graph_html_reddit = create_chart("Reddit", from_date, to_date, keyword)
+    graph_html_mastodon = create_chart("Mastodon", from_date, to_date, keyword)
+    graph_html_newsappi = create_chart("NewsApi", from_date, to_date, keyword)
 
     return render_template('chart.html', 
-                           graph_html_mastodon=graph_html_mastodon, 
-                           graph_html_reddit=graph_html_reddit,
                            graph_html_all_sources=graph_html_all_sources,
+                           graph_html_reddit=graph_html_reddit,
+                           graph_html_mastodon=graph_html_mastodon,
+                           graph_html_newsapi=graph_html_newsappi, 
                            from_date=from_date, 
                            to_date=to_date,
                            keyword=keyword)
