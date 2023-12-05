@@ -3,36 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <title>Price and Sentiment Analysis</title>
-</head> 
+    <style>
+        .checkbox-group {
+            display: flex;
+            padding: 10px 0;
+        }
+
+        .checkboxes {
+            margin-right: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
 <body>
     <h1>Price and Sentiment Analysis</h1>
 
     <form action="/" method="get">
-        <label for="from_date">From:</label>
-        <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
+        <h2>Filters</h2>
+        <div class="form-section">
+            <label for="from_date">From:</label>
+            <input type="date" id="from_date" name="from_date" value="{{ from_date }}">
 
-        <label for="to_date">To:</label>
-        <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+            <label for="to_date">To:</label>
+            <input type="date" id="to_date" name="to_date" value="{{ to_date }}">
+        </div>
 
-        <label for="keyword">Keyword:</label>
-        <select id="keyword" name="keyword">
-            <option value="Bitcoin" {% if keyword == 'Bitcoin' %}selected{% endif %}>Bitcoin</option>
-            <option value="Ethereum" {% if keyword == 'Ethereum' %}selected{% endif %}>Ethereum</option>
-        </select>
+        <div class="form-section">
+            <label for="keyword">Keyword:</label>
+            <select id="keyword" name="keyword">
+                <option value="Bitcoin" {% if keyword == 'Bitcoin' %}selected{% endif %}>Bitcoin</option>
+                <option value="Ethereum" {% if keyword == 'Ethereum' %}selected{% endif %}>Ethereum</option>
+            </select>
+        </div>
+
+        <div class="checkbox-group">
+            <div class="checkboxes">
+                <div>
+                    <input type="checkbox" id="vader" name="vader" {{ 'checked' if vader else '' }}>
+                    <label for="vader">Vader</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="textblob" name="textblob" {{ 'checked' if textblob else '' }}>
+                    <label for="textblob">TextBlob</label>
+                </div>
+            </div>
+            <div class="checkboxes">
+                <div>
+                    <input type="checkbox" id="reddit" name="reddit" {{ 'checked' if reddit else '' }}>
+                    <label for="reddit">Reddit</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="mastodon" name="mastodon" {{ 'checked' if mastodon else '' }}>
+                    <label for="mastodon">Mastodon</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="newsapi" name="newsapi" {{ 'checked' if newsapi else '' }}>
+                    <label for="newsapi">NewsAPI</label>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" name="form_submitted" value="true">
 
         <button type="submit">Search</button>
     </form>
 
-    <h2>All Sources</h2>
+    <h2>Averages</h2>
     {{ graph_html_all_sources|safe }}
 
-    <h2>Reddit Source</h2>
+    <h2>Reddit</h2>
     {{ graph_html_reddit|safe }}
 
-    <h2>Mastodon Source</h2>
+    <h2>Mastodon</h2>
     {{ graph_html_mastodon|safe }}
 
-    <h2>NewsApi Source</h2>
+    <h2>NewsApi</h2>
     {{ graph_html_newsapi|safe }}
 </body>
 </html>
